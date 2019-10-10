@@ -1,0 +1,72 @@
+﻿using AppDebugUno.Shared;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.System.Profile;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
+
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+
+namespace AppDebugUno
+{
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MainPage : Page, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        string _sDebug = "Please wait...";
+        public string sDebug
+        {
+            get { return _sDebug; }
+            set
+            {
+                if (_sDebug != value)
+                {
+                    _sDebug = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public MainPage()
+        {
+            this.InitializeComponent();
+        }
+
+        private void bt_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(BlankPageDebug));
+        }
+
+        private void NavigationMenu_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+
+        }
+
+    }
+}
