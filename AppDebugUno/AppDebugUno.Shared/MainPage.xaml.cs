@@ -40,7 +40,7 @@ namespace AppDebugUno
             }
         }
 
-        string _sDebug = "Please wait...";
+        string _sDebug = "Click anywhere...";
         public string sDebug
         {
             get { return _sDebug; }
@@ -58,14 +58,14 @@ namespace AppDebugUno
             this.InitializeComponent();
         }
 
+        private void grid_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            sDebug = "Pointer released at: " + DateTime.Now;
+        }
+
         private void bt_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(BlankPageDebug));
-        }
-
-        private void NavigationMenu_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-
         }
 
     }

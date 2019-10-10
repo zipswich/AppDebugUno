@@ -8,8 +8,17 @@
     xmlns:android="http://uno.ui/android"
     mc:Ignorable="d"
     x:DefaultBindMode="OneWay">
-    <StackPanel>
-        <TextBlock>This is invisible</TextBlock>
-        <TextBlock Foreground="DarkGreen">This is visible</TextBlock>
-    </StackPanel>
+    <Grid 
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        PointerReleased="grid_PointerReleased"
+        Background="Transparent"
+        >
+        <StackPanel>
+            <TextBlock>This is invisible</TextBlock>
+            <TextBlock Foreground="DarkGreen">This is visible</TextBlock>
+            <TextBlock Foreground="DarkGreen"
+                   Text="{x:Bind sDebug}"/>
+        </StackPanel>
+    </Grid>
 </Page>
