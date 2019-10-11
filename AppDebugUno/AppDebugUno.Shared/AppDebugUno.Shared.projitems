@@ -36,6 +36,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\circle2.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\QuestionMarkRed.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\123_QuestionMarkRed.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\LockScreenLogo.scale-200.png" />

@@ -40,7 +40,7 @@ namespace AppDebugUno
             }
         }
 
-        string _sDebug = "Click anywhere...";
+        string _sDebug = "Click the image";
         public string sDebug
         {
             get { return _sDebug; }
@@ -53,12 +53,16 @@ namespace AppDebugUno
                 }
             }
         }
+
+        uint uiWidth = 30;
+        uint uiHeight = 30;
+
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        private void grid_PointerReleased(object sender, PointerRoutedEventArgs e)
+        private void border_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             sDebug = "Pointer released at: " + DateTime.Now;
         }

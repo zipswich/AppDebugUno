@@ -8,17 +8,28 @@
     xmlns:android="http://uno.ui/android"
     mc:Ignorable="d"
     x:DefaultBindMode="OneWay">
-    <Grid 
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        PointerReleased="grid_PointerReleased"
-        Background="Transparent"
-        >
+    <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock>This is invisible</TextBlock>
-            <TextBlock Foreground="DarkGreen">This is visible</TextBlock>
+            <TextBlock Foreground="DarkGreen">This is visible.</TextBlock>
             <TextBlock Foreground="DarkGreen"
                    Text="{x:Bind sDebug}"/>
         </StackPanel>
+        <Border 
+            Grid.Row="1"
+            BorderThickness="2" 
+            BorderBrush="Red"
+            PointerReleased="border_PointerReleased" 
+            Background="Transparent"
+            >
+            <!--Background="Transparent" is needed for PointerReleased to work on Android -->
+            <Image Source="Assets\StoreLogo.png"
+            />
+        </Border>
     </Grid>
+
 </Page>
