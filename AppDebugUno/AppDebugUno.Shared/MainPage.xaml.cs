@@ -60,6 +60,7 @@ namespace AppDebugUno
         public MainPage()
         {
             this.InitializeComponent();
+            gridRoot.ColumnDefinitions[1].Width = new GridLength(0);
         }
 
         private void border_PointerReleased(object sender, PointerRoutedEventArgs e)

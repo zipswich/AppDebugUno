@@ -6,6 +6,7 @@
     <WasmHead>true</WasmHead>
     <DefineConstants>$(DefineConstants);__WASM__</DefineConstants>
     <NoWarn>NU1701</NoWarn>
+    <UseUnoXamlParser>true</UseUnoXamlParser>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="..\AppDebugUno.UWP\Assets\*.png" Link="Assets\%(FileName)%(Extension)" />

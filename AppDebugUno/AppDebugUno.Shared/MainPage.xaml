@@ -8,13 +8,51 @@
     xmlns:android="http://uno.ui/android"
     mc:Ignorable="d"
     x:DefaultBindMode="OneWay">
-    <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="gridRoot"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <StackPanel>
-            <TextBlock>This is invisible</TextBlock>
+            <TextBlock 
+           Grid.Column="0" 
+            TextTrimming="WordEllipsis"
+            FontSize="56"
+            FontWeight="Light"
+            TextWrapping="NoWrap"
+            Text="Test Results"
+            HorizontalAlignment="Center"
+                />
+            <TextBlock 
+           Grid.Column="0" 
+            TextTrimming="WordEllipsis"
+            FontSize="56"
+            FontWeight="Light"
+            TextWrapping="NoWrap"
+            Text="Test Results"
+            HorizontalAlignment="Center"
+                />
+            <TextBlock 
+           Grid.Column="0" 
+            TextTrimming="WordEllipsis"
+            FontSize="56"
+            FontWeight="Light"
+            TextWrapping="NoWrap"
+            Text="Test Results"
+            HorizontalAlignment="Center"
+                />
+        </StackPanel>
+
+        <TextBlock Grid.Column="2">
+            This column 2 should be displayed.
+        </TextBlock>
+        <StackPanel>
+            <TextBlock>This is invisible.</TextBlock>
             <TextBlock Foreground="DarkGreen">This is visible.</TextBlock>
             <TextBlock Foreground="DarkGreen"
                    Text="{x:Bind sDebug}"/>
