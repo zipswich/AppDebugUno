@@ -54,8 +54,19 @@ namespace AppDebugUno
             }
         }
 
-        uint uiWidth = 30;
-        uint uiHeight = 30;
+        string _sDummy = "Dummy string needed for calling a converter";
+        public string sDummy
+        {
+            get { return _sDummy; }
+            set
+            {
+                if (_sDummy != value)
+                {
+                    _sDummy = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         bool _bBool = true;
         public bool bBool
@@ -104,4 +115,19 @@ namespace AppDebugUno
             return value is Visibility && (Visibility)value == Visibility.Visible;
         }
     }
+
+
+    public sealed class TextConverterDebug : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return "Converter is called for ConverterParameter:" +(parameter as string);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return "Converted Back";
+        }
+    }
+
 }

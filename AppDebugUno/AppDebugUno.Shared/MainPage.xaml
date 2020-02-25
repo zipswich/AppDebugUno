@@ -12,7 +12,7 @@
     >
     <Page.Resources>
         <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
+        <local:TextConverterDebug x:Key="TextConverterDebug"/>
     </Page.Resources>
 
 
@@ -22,6 +22,11 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Orientation="Vertical">
+            <TextBlock
+                Text="Issue 1: x:DefaultBindMode not working for iOS"
+                FontSize="30"
+                FontWeight="Bold"
+                />
             <Button 
                 Content="Click me"
                 Click="bt_Click"/>
@@ -31,7 +36,6 @@
             <TextBlock 
                 Text="{x:Bind sDebug, Mode=OneWay}"
                 FontSize="30"/>
-
             <TextBlock 
                 Text="The visibility of this TextBlock should be toggled by the button because  x:DefaultBindMode=&quot;OneWay&quot;"
                 FontSize="30"
@@ -40,6 +44,29 @@
                 Text="The visibility of this TextBlock should be toggled by the button because  x:DefaultBindMode=&quot;OneWay&quot;"
                 FontSize="30"
                 Visibility="{x:Bind bBool, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <TextBlock
+                Margin="0 30 0 0"
+                Text="Issue 2: Converter is not called unless there is a dummy value"
+                FontSize="30"
+                FontWeight="Bold"
+                />
+            <TextBlock
+                FontSize="30"
+                Text="x:Bind with a dummy value:"/>
+            <TextBlock
+                Margin="10 0 0 0"
+                FontSize="30"
+                Text="{x:Bind sDummy, ConverterParameter=test, Converter={StaticResource TextConverterDebug}}"
+                 />
+            <TextBlock
+                FontSize="30"
+                Text="x:Bind without a dummy value:"/>
+            <TextBlock
+                Margin="10 0 0 0"
+                FontSize="30"
+                Text="{x:Bind ConverterParameter=test, Converter={StaticResource TextConverterDebug}}"
+                 />
         </StackPanel>
     </Grid>
 </Page>
