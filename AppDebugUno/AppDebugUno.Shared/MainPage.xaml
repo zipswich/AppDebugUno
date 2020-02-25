@@ -7,67 +7,39 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:android="http://uno.ui/android"
     mc:Ignorable="d"
-    x:DefaultBindMode="OneWay">
-    <Grid x:Name="gridRoot"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel>
-            <TextBlock 
-           Grid.Column="0" 
-            TextTrimming="WordEllipsis"
-            FontSize="56"
-            FontWeight="Light"
-            TextWrapping="NoWrap"
-            Text="Test Results"
-            HorizontalAlignment="Center"
-                />
-            <TextBlock 
-           Grid.Column="0" 
-            TextTrimming="WordEllipsis"
-            FontSize="56"
-            FontWeight="Light"
-            TextWrapping="NoWrap"
-            Text="Test Results"
-            HorizontalAlignment="Center"
-                />
-            <TextBlock 
-           Grid.Column="0" 
-            TextTrimming="WordEllipsis"
-            FontSize="56"
-            FontWeight="Light"
-            TextWrapping="NoWrap"
-            Text="Test Results"
-            HorizontalAlignment="Center"
-                />
-        </StackPanel>
+    RequestedTheme="Dark"
+    x:DefaultBindMode="OneWay"
+    >
+    <Page.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <TextBlock Grid.Column="2">
-            This column 2 should be displayed.
-        </TextBlock>
-        <StackPanel>
-            <TextBlock>This is invisible.</TextBlock>
-            <TextBlock Foreground="DarkGreen">This is visible.</TextBlock>
-            <TextBlock Foreground="DarkGreen"
-                   Text="{x:Bind sDebug}"/>
+    </Page.Resources>
+
+
+
+    <Grid x:Name="gridRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+            <Button 
+                Content="Click me"
+                Click="bt_Click"/>
+            <TextBlock 
+                Text="{x:Bind sDebug}"
+                FontSize="30"/>
+            <TextBlock 
+                Text="{x:Bind sDebug, Mode=OneWay}"
+                FontSize="30"/>
+
+            <TextBlock 
+                Text="The visibility of this TextBlock should be toggled by the button because  x:DefaultBindMode=&quot;OneWay&quot;"
+                FontSize="30"
+                Visibility="{x:Bind bBool,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock 
+                Text="The visibility of this TextBlock should be toggled by the button because  x:DefaultBindMode=&quot;OneWay&quot;"
+                FontSize="30"
+                Visibility="{x:Bind bBool, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
-        <Border 
-            Grid.Row="1"
-            BorderThickness="2" 
-            BorderBrush="Red"
-            PointerReleased="border_PointerReleased" 
-            Background="Transparent"
-            >
-            <!--Background="Transparent" is needed for PointerReleased to work on Android -->
-            <Image Source="Assets\StoreLogo.png"
-            />
-        </Border>
     </Grid>
-
 </Page>

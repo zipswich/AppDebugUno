@@ -40,7 +40,7 @@ namespace AppDebugUno
             }
         }
 
-        string _sDebug = "Click the image";
+        string _sDebug = "This text should change after each button click because x:DefaultBindMode=\"OneWay\".";
         public string sDebug
         {
             get { return _sDebug; }
@@ -57,12 +57,29 @@ namespace AppDebugUno
         uint uiWidth = 30;
         uint uiHeight = 30;
 
+        bool _bBool = true;
+        public bool bBool
+        {
+            get { return _bBool; }
+            set
+            {
+                if (_bBool != value)
+                {
+                    _bBool = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
-            gridRoot.ColumnDefinitions[1].Width = new GridLength(0);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+        }
         private void border_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             sDebug = "Pointer released at: " + DateTime.Now;
@@ -70,8 +87,21 @@ namespace AppDebugUno
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(BlankPageDebug));
+            bBool = !bBool;
+            sDebug = DateTime.Now.ToString();
+        }
+    }
+
+    public sealed class BooleanToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return (value is bool && (bool)value) ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return value is Visibility && (Visibility)value == Visibility.Visible;
+        }
     }
 }
