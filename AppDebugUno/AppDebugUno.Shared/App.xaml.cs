@@ -1,19 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Uno.Threading;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Background;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace AppDebugUno
@@ -80,8 +75,72 @@ namespace AppDebugUno
                 // Ensure the current window is active
                 Windows.UI.Xaml.Window.Current.Activate();
             }
+
+#if NETFX_CORE
+            RegisterBackgroundTask();
+            //RegisterToastNotificcationTrigger();
+#endif
         }
 
+        AsyncLock alBackgroundRegistration = new AsyncLock();
+
+        private async void RegisterBackgroundTask()
+        {
+            using (await alBackgroundRegistration.LockAsync(new System.Threading.CancellationToken()))
+            {
+                try
+                {
+
+                    var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+                    if (backgroundAccessStatus == BackgroundAccessStatus.AlwaysAllowed ||
+                        backgroundAccessStatus == BackgroundAccessStatus.AllowedSubjectToSystemPolicy)
+                    {
+                        foreach (var task in BackgroundTaskRegistration.AllTasks)
+                        {
+                            if (task.Value.Name == "foo")
+                            {
+                                task.Value.Unregister(true);
+                            }
+                        }
+
+                        BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                        taskBuilder.Name = "foo";
+                        taskBuilder.TaskEntryPoint = "background.Foo";
+                        //     If FreshnessTime is set to less than 15 minutes,
+                        //     an exception is thrown when attempting to register the background task.
+                        taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                        BackgroundTaskRegistration registration = taskBuilder.Register();
+                        registration.Completed += new BackgroundTaskCompletedEventHandler(OnCompleted);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handle background task completion.
+        /// </summary>
+        /// <param name="task">The task that is reporting completion.</param>
+        /// <param name="e">Arguments of the completion report.</param>
+        private async void OnCompleted(IBackgroundTaskRegistration task, BackgroundTaskCompletedEventArgs args)
+        {
+
+            try
+            {
+                await Window.Current.Content.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        () =>
+                        {
+                            Debug.WriteLine(task.Name);
+                        });
+            }
+            catch (Exception ex)
+            {
+                Debug.Write("Exception from OnCompleted():" + ex.Message);
+            }
+        }
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
@@ -113,39 +172,60 @@ namespace AppDebugUno
         /// <param name="factory"></param>
         static void ConfigureFilters(ILoggerFactory factory)
         {
-            factory
-                .WithFilter(new FilterLoggerSettings
-                    {
-                        { "Uno", LogLevel.Warning },
-                        { "Windows", LogLevel.Warning },
 
-						// Debug JS interop
-						// { "Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug },
-
-						// Generic Xaml events
-						// { "Windows.UI.Xaml", LogLevel.Debug },
-						// { "Windows.UI.Xaml.VisualStateGroup", LogLevel.Debug },
-						// { "Windows.UI.Xaml.StateTriggerBase", LogLevel.Debug },
-						// { "Windows.UI.Xaml.UIElement", LogLevel.Debug },
-
-						// Layouter specific messages
-						// { "Windows.UI.Xaml.Controls", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.Layouter", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.Panel", LogLevel.Debug },
-						// { "Windows.Storage", LogLevel.Debug },
-
-						// Binding related messages
-						// { "Windows.UI.Xaml.Data", LogLevel.Debug },
-
-						// DependencyObject memory references tracking
-						// { "ReferenceHolder", LogLevel.Debug },
-					}
-                )
-#if DEBUG
-				.AddConsole(LogLevel.Debug);
-#else
-                .AddConsole(LogLevel.Information);
-#endif
         }
+
+        async void RegisterToastNotificcationTrigger()
+        {
+            try
+            {
+                //https://docs.microsoft.com/en-us/windows/uwp/design/shell/tiles-and-notifications/send-local-toast
+                // If background task is already registered, do nothing
+
+                if (BackgroundTaskRegistration.AllTasks.Count > 0)
+                {
+                    foreach (var task in BackgroundTaskRegistration.AllTasks)
+                    {
+                        if (task.Value.Name == "foo")
+                        {
+                            task.Value.Unregister(true);
+                        }
+                        else
+                        {
+                            //do nothing
+                        }
+
+                    }
+                }
+                else
+                {
+                    //do nothing
+                }
+
+
+                if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals("foo")))
+                    return;
+
+                // Otherwise request access
+                BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
+
+                // Create the background task
+                BackgroundTaskBuilder builder = new BackgroundTaskBuilder()
+                {
+                    Name = "fooToaster",
+                };
+
+                // Assign the toast action trigger
+                builder.SetTrigger(new ToastNotificationActionTrigger());
+
+                // And register the task
+                BackgroundTaskRegistration registration = builder.Register();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
     }
 }

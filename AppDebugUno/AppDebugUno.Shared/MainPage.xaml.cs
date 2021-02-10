@@ -3,13 +3,16 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Uno.Threading;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System.Profile;
@@ -82,6 +85,14 @@ namespace AppDebugUno
             }
         }
 
+        public double dTileFontSize
+        {
+            get
+            {
+                return 72;
+            }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -90,17 +101,9 @@ namespace AppDebugUno
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-        }
-        private void border_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            sDebug = "Pointer released at: " + DateTime.Now;
+            ucDebug.Show();
         }
 
-        private void bt_Click(object sender, RoutedEventArgs e)
-        {
-            bBool = !bBool;
-            sDebug = DateTime.Now.ToString();
-        }
     }
 
     public sealed class BooleanToVisibilityConverter : IValueConverter
@@ -121,7 +124,7 @@ namespace AppDebugUno
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return "Converter is called for ConverterParameter:" +(parameter as string);
+            return "Converter is called for ConverterParameter:" + (parameter as string);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
