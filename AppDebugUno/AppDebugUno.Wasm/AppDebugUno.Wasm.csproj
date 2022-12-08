@@ -38,7 +38,7 @@
     <!-- Note that for WebAssembly version 1.1.1 of the console logger required -->
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Uno.UI" Version="3.5.0-dev.351" />
     <PackageReference Include="Uno.UI.WebAssembly" Version="3.5.0-dev.351" />
     <PackageReference Include="Uno.Wasm.Bootstrap" Version="2.0.0-dev.150" />
